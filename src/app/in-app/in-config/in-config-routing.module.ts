@@ -7,6 +7,7 @@ import { Config002HamperDetailComponent } from './pages/config002-hamper-detail/
 import { Config002PartnerManagementComponent } from './pages/config002-partner-management/config002-partner-management.component';
 import { Config003HamperDetailComponent } from './pages/config003-hamper-detail/config003-hamper-detail.component';
 import { Config005HamperDetailComponent } from './pages/config005-hamper-detail/config005-hamper-detail.component';
+import { Config001AuthorizationComponent } from './pages/config001-authorization/config001-authorization.component';
 const routes: Routes = [
   {
     path: '',
@@ -41,6 +42,10 @@ const routes: Routes = [
         path: 'config002-partner-management', //for test purposes
         component: Config002PartnerManagementComponent,
       },
+      {
+        path: 'config001-authorization', //Phân quyền
+        component: Config001AuthorizationComponent,
+      }
     ],
   },
 ];

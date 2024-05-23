@@ -1,1 +1,197 @@
-<div style="background-color: navajowhite; width: 100%; height: 100%;">HeHehe</div>
+<div class="evaluation-container">
+    <div class="breadcrumb_functions_container" [ngClass]="{'disable': selectedEvaluationList && selectedEvaluationList.length > 0}">
+        <kendo-breadcrumb [items]="breadCrumpItems" SetClassSVGIcon HamperBreadcrumb class="breadcrumb"></kendo-breadcrumb>
+        <div class="status-filter-container">
+            <ng-container *ngFor="let button of statusButtons">
+                <div class="status-button-block" [ngClass]="{'active': button.actived == true}" *ngIf="button.text != 'Trả về'" (click)="button.actived = !button.actived; onSelectState(); applyFilter()" >
+                    <kendo-label class="button-label" text="{{button.text}}"></kendo-label>
+                    <input type="checkbox" class="status-button" #statusCheckBox kendoCheckBox [(ngModel)]="button.actived"/>
+                </div>
+            </ng-container>
+        </div>
+        <div class="func-button-container">
+            <button kendoButton  class="add-button"><kendo-svg-icon [icon]="icons.exportIcon"></kendo-svg-icon></button>
+            <button kendoButton  class="add-button"><kendo-svg-icon [icon]="icons.importIcon"></kendo-svg-icon> Template</button>
+            <button kendoButton  class="add-button success"><kendo-svg-icon [icon]="icons.plusIcon"></kendo-svg-icon> THÊM MỚI</button>
+        </div>
+    </div>
+    <div class="search_filter_container" [ngClass]="{'disable': selectedEvaluationList && selectedEvaluationList.length > 0}">
+        <div class="reset-block">
+            <div class="icon-text-block">
+                <div class="icon-block"><kendo-svg-icon [icon]="icons.filterIcon"></kendo-svg-icon></div>
+                <div class="text-block">LỌC DỮ LIỆU</div>
+            </div>
+            <div class="reset-button-block">
+                <div class="icon-block"></div>
+                <div class="reset-text" (click)="resetFilter()">Xoá bộ lọc</div>
+            </div>
+        </div>
+
+        <div class="search-block">
+            <kendo-label class="input-label">Tìm kiếm</kendo-label>
+            <div class="search-input-button-block">
+                <div class="search-input-block">
+                    <kendo-svg-icon [icon]="icons.searchIcon" class="input-icon"></kendo-svg-icon>
+                    <kendo-textbox [(value)]="searchTerm" class="search-input" placeholder="Tìm theo đợt đánh giá" (keydown.enter)="applyFilter()"></kendo-textbox>
+                </div>
+                <button kendoButton  class="add-button success search-button" (click)="applyFilter()"><kendo-svg-icon [icon]="icons.searchIcon"></kendo-svg-icon> Tìm</button>
+            </div>
+        </div>
+
+        <div class="date-filter-block">
+            <kendo-label class="input-label">Lọc theo thời gian mở đợt kiểm tra</kendo-label>
+            <div class="date-picker-block">
+                <kendo-datepicker (valueChange)="applyFilter()" [(ngModel)]="startDate" [disabledDates]="disabledStartDates" [calendarType]="'classic'" SetClassSVGIcon class="date-picker-input search-input" [readOnlyInput]="true" format="dd/MM/yyyy" formatPlaceholder="formatPattern" ></kendo-datepicker>
+                <span>-</span>
+                <kendo-datepicker (valueChange)="applyFilter()" [(ngModel)]="endDate" [disabledDates]="disabledEndDates" [calendarType]="'classic'" SetClassSVGIcon class="date-picker-input search-input" [readOnlyInput]="true" format="dd/MM/yyyy" formatPlaceholder="formatPattern"></kendo-datepicker>
+            </div>
+        </div>
+        <div class="status-filter-container">
+            <kendo-label class="input-label"></kendo-label>
+            <div class="button-block">
+                <ng-container *ngFor="let button of evaluationStatusButtons">
+                    <div class="status-button-block" [ngClass]="{'active': button.actived == true}" *ngIf="button.text != 'Trả về'" (click)="button.actived = !button.actived; applyFilter()" >
+                        <kendo-label class="button-label" text="{{button.text}}"></kendo-label>
+                        <input type="checkbox" class="status-button" #statusCheckBox kendoCheckBox [(ngModel)]="button.actived"/>
+                    </div>
+                </ng-container>
+            </div>     
+        </div>
+    </div>
+
+    <div class="evaluation-list-container">
+        
+        <kendo-grid class="grid-container"
+        [kendoGridBinding]="evaluationList"
+        (selectionChange)="onSelectItemList()"
+        kendoGridSelectBy="Code"
+        [scrollable]="'scrollable'"
+        [(selectedKeys)]="selectedEvaluationListStr"
+        [selectable]="{ checkboxOnly: true }"
+        [pageSize]="5"
+        [pageable]="{type:'numeric', pageSizes: true, info:false, buttonCount: 3}"
+        [autoSize]="true"
+        [loading]="loadingState"
+        SetClassSVGIcon>
+            <kendo-grid-checkbox-column
+            [showSelectAll]="true"
+            [width]="50"
+            [minResizableWidth]="60"
+            [maxResizableWidth]="60"
+            class="center-checkbox" headerClass="center-checkbox"
+            >
+            </kendo-grid-checkbox-column>
+            <kendo-grid-column [width]="450" [maxResizableWidth]="650" title="Đợt đánh giá" class="column column-2" headerClass="column column-2">
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    <div class="session-name-container">
+                        <div class="session-name-line">
+                            <div class="session-name-title" title="{{dataItem.Code}}"><span>{{dataItem.Code}}</span></div>
+                            <div class="session-name-title-seperator"></div>
+                            <div class="session-name-title" title="{{dataItem.Name}}"><span>{{dataItem.Name}}</span></div>
+                        </div>
+                        <div class="session-name-line">
+                            <div class="session-name"><span>Phân loại</span></div>
+                            <div class="session-name-seperator"></div>
+                            <div class="session-name"><span>{{dataItem.Type}}</span></div>
+                        </div>
+                    </div>
+                </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column [width]="150" [maxResizableWidth]="250" title="Thời gian bắt đầu" class="column column-3 left-column" headerClass="column column-3 left-column">
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    <div class="session-name-container">
+                        <div class="session-name-line flex-col left-col">
+                            <div class="session-name-title"><span>{{dataItem.StartDate? formatDateToDDMMYYYY(dataItem.StartDate) : ''}}</span></div>
+                            <div class="session-name"><span>{{dataItem.EndDate? formatDateToDDMMYYYY(dataItem.EndDate) : ''}}</span></div>
+                        </div>
+                    </div>
+                </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column [width]="150" [maxResizableWidth]="250" title="SL nhân sự tham gia" class="column column-3 center-column" headerClass="column column-3 center-column">
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    <div class="session-name-container">
+                        <div class="session-name-line flex-col center-col">
+                            <div class="session-name"><span>{{dataItem.ParticipateAmount}}</span></div>
+                        </div>
+                    </div>
+                </ng-template>
+            </kendo-grid-column>
+ 
+            <kendo-grid-column [width]="150" [maxResizableWidth]="250" title="Tình trạng" class="column column-3 right-column" headerClass="column column-3 right-column">
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    <div class="session-name-container">
+                        <div class="session-name-line flex-col right-col">
+                            <div class="session-name" [style.color]="dataItem.State| statusColor"><span>{{dataItem.State}}</span></div>
+                            <div class="session-name session-status"><span>{{dataItem.SessionStatus}}</span></div>
+                        </div>
+                    </div>
+                </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column [width]="60" [minResizableWidth]="60" class="center-column floating-column" headerClass="center-column floating-column fixed-column">
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    <div class="button-box-shadow">
+                        <div class="tooltip-button" [ngClass]="{'active': (selectedItemToolTip && selectedItemToolTip.Code == dataItem.Code)}" #anchor (click)="selectToolTipItem(dataItem, anchor, $event)">
+                            <div><kendo-svg-icon [icon]="icons.moreHorizontalIcon"></kendo-svg-icon></div>
+                        </div>
+                    </div>
+                    
+                    <kendo-popup
+                        [anchor]="anchorRef"
+                        [anchorAlign]="anchorAlign"
+                        [popupAlign]="popupAlign"
+                        [positionMode]="'absolute'"
+                        [collision]="collision"
+                        (anchorViewportLeave)="selectedItemToolTip = null; this.anchorRef = null;"
+                        *ngIf="(selectedItemToolTip && toolTipFuncList && selectedItemToolTip.Code == dataItem.Code)"
+                        [animate]="false"
+                        class='tooltip-list'
+                        >
+                        <div class="content">
+                            <div class="session-function">
+                                <div class="icon-text-block" *ngFor="let func of toolTipFuncList.sessionFuncLst">
+                                    <div class="icon-block"><kendo-svg-icon [icon]="func.icon"></kendo-svg-icon></div>
+                                    <span>{{func.text}}</span>
+                                </div>
+                            </div>
+                            <div class="state-function">
+                                <div class="icon-text-block" *ngFor="let func of toolTipFuncList.stateFuncLst">
+                                    <div class="icon-block"><kendo-svg-icon [icon]="func.icon"></kendo-svg-icon></div>
+                                    <span>{{func.text}}</span>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </kendo-popup>
+                </ng-template>
+                
+            </kendo-grid-column>
+            <ng-template kendoPagerTemplate>
+                <div class="pager-container">
+                    <kendo-pager-page-sizes [pageSizes]="pagingList" #pageSize></kendo-pager-page-sizes>
+                    <div class="page-number-container">
+                        <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+                        <kendo-pager-numeric-buttons [buttonCount]="3"></kendo-pager-numeric-buttons>
+                        <kendo-pager-next-buttons></kendo-pager-next-buttons>
+                    </div>
+                </div>
+            </ng-template>
+        </kendo-grid>
+        <div class="center-popup" *ngIf="multiToolTipFunc && multiToolTipFunc.length > 0">
+            <div class="selected-amount block">
+                <span class="amount-text">{{selectedEvaluationList.length}}</span>
+                <span class="detail-text">Đã chọn</span>
+            </div>
+            <div class="func-button block" [ngClass]="{'delete-btn' : func.text == 'Xoá câu hỏi'}"  *ngFor="let func of multiToolTipFunc">
+                <div class="icon-block"><kendo-svg-icon [icon]="func.icon" class="icon"></kendo-svg-icon></div>
+                <div class="text-block">{{func.text}}</div>
+            </div>
+            <div class="seperate-bar"></div>
+            <div class="close-button func-button block" (click)="closeMultiToolFunc()"><kendo-svg-icon [icon]="icons.xIcon"></kendo-svg-icon></div>
+        </div>
+    </div>
+
+    
+</div>

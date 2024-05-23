@@ -1,0 +1,121 @@
+<div class="authorization-container">
+    <div class="breadcrumb_functions_container">
+        <kendo-breadcrumb [items]="breadCrumpItems" SetClassSVGIcon HamperBreadcrumb
+            class="breadcrumb"></kendo-breadcrumb>
+    </div>
+    <div class="search_filter_container grid-cols-11">
+        <div class="reset-block col-span-1">
+            <div class="icon-text-block">
+                <div class="icon-block"><kendo-svg-icon [icon]="icons.filterIcon"></kendo-svg-icon></div>
+                <div class="text-block">LỌC DỮ LIỆU</div>
+            </div>
+        </div>
+        <div class="search-block col-span-2">
+            <kendo-label class="input-label">Công ty</kendo-label>
+            <div class="search-input-block">
+                <kendo-dropdownlist iconClass="fa-solid fa-angle-down" [filterable]="true"
+                    (filterChange)="handleCompanyDropDownFilter($event)" #companyTerm [data]="companyList"
+                    [defaultItem]="defaultCompanyDropDownValue" [value]="companyList[0]" [textField]="'Bieft'" [valueField]="'Code'"
+                    (selectionChange)="onCompanySelect($event)"                 
+                    class="search-input">
+
+                </kendo-dropdownlist>
+            </div>
+        </div>
+        <div class="search-block col-span-2">
+            <kendo-label class="input-label">Phân hệ</kendo-label>
+            <div class="search-input-block">
+                <!-- [fetchChildren]="fetchSubSystemChildren" [hasChildren]="hasSubSystemChildren"
+                (filterChange)="filterSubSystem($event)" -->
+                <kendo-dropdowntree kendoDropDownTreeExpandable SetClassSVGIcon [filterable]="true"
+                    [expandOnFilter]="true" [clearButton]="false" [kendoDropDownTreeHierarchyBinding]="subSystemList"
+                    [textField]="'Vietnamese'" [valueField]="'Code'" (opened)="onSubSystemOpen()"
+                    (valueChange)="onSubsystemSelect($event)" 
+                    [childrenField]="'ListGroup'" class="search-input">
+                    <!-- <ng-template
+                    kendoDropDownTreeNodeTemplate
+                    let-dataItem
+                    let-index="index"
+                    >
+                    
+                  </ng-template> -->
+                    <ng-template kendoDropDownTreeNodeTemplate let-dataItem>
+                        <div><span class="icon"><kendo-svg-icon [icon]="icons.inheritedIcon"></kendo-svg-icon></span>
+                            <span>{{dataItem.Vietnamese}}</span></div>
+                    </ng-template>
+
+                </kendo-dropdowntree>
+            </div>
+        </div>
+        <div class="search-block col-span-3">
+            <kendo-label class="input-label">Bộ phận</kendo-label>
+            <div class="search-input-block">
+                <kendo-multiselecttree kendoMultiSelectTreeExpandable SetClassSVGIcon [filterable]="true"
+                    [expandOnFilter]="true" [clearButton]="false"
+                    [kendoMultiSelectTreeHierarchyBinding]="departmentList" [placeholder]="'-- Chọn --'"
+                    [textField]="'Department'" [valueField]="'Code'" [childrenField]="'ListDepartment'"
+                    (valueChange)="onDepartmentSelect($event)"
+                    [(ngModel)]="dropDownSelectedDepartment"
+                    class="search-input multi-select">
+                    <ng-template kendoMultiSelectTreeTagTemplate let-dataItem>
+                    <span>{{dataItem.Department}}</span>
+                    </ng-template>
+                </kendo-multiselecttree>
+            </div>
+        </div>
+        <div class="search-block col-span-3">
+            <kendo-label class="input-label">Vai trò</kendo-label>
+            <div class="search-input-block">
+                <kendo-multiselect SetClassSVGIcon [filterable]="true" [expandOnFilter]="true" [clearButton]="false"
+                    [data]="roleDropdownList" [placeholder]="'-- Chọn --'" [textField]="'RoleName'" 
+                    (valueChange)="onRoleDropDownSelect($event)" [(ngModel)]="dropDownSelectedRoles"
+                    (filterChange)="searchRoleDropDown($event)"
+                    [valueField]="'Code'" class="search-input role-dropdown"></kendo-multiselect>
+            </div>
+        </div>
+
+    </div>
+
+    
+    <div class="treelist_container">
+        <kendo-treelist
+        [kendoTreeListHierarchyBinding]="moduleSubsystemList"
+        [idField]="'Code'"
+        kendoTreeListExpandable
+        [initiallyExpanded]="initiallyExpanded"
+        [hasChildren]="hasChildren" 
+        [fetchChildren]="fetchChildren"
+        [virtualColumns]="true"
+        [scrollable]="'scrollable'"
+        class="treelist"
+        >   
+
+            <kendo-treelist-column [locked]="columnList?.length > 0 ? true : false" [expandable]="true" title="Chức năng phân quyền" [width]="356" class="row-height locked-row" headerClass="centertext row-height header-row">
+                <ng-template kendoTreeListCellTemplate let-dataItem>                   
+                    <span><kendo-svg-icon [icon]="icons.inheritedIcon" *ngIf="dataItem.ListFunctions" class="item-icon"></kendo-svg-icon></span>
+                    <span><kendo-svg-icon [icon]="icons.groupCollectionIcon" *ngIf="dataItem.ListAction" class="item-icon"></kendo-svg-icon></span>     
+                    <span><kendo-svg-icon [icon]="icons.shareIcon" *ngIf="dataItem.ActionName && dataItem.ListAction == null" class="item-icon"></kendo-svg-icon></span>     
+                    <span class="text-gap" [ngClass]="{'group-text': dataItem.ListFunctions}">{{ dataItem.Vietnamese? dataItem.Vietnamese : dataItem.ActionName }}</span>
+                </ng-template>
+            </kendo-treelist-column>
+
+
+            <kendo-treelist-column *ngFor="let column of columnList" title="{{column.RoleName}}" [width]="164" class="centertext">
+                <ng-template kendoTreeListHeaderTemplate>
+                    <div class="header-row-item">
+                        <div class="header-text-block"><span class="text">{{column.RoleID}}</span></div>
+                        <div class="header-text-block" [title]="column.RoleName"><span class="text">{{column.RoleName}}</span></div>                      
+                    </div>
+                </ng-template>
+                <ng-template kendoTreeListCellTemplate let-dataItem>
+                    <div *ngIf="dataItem.ActionName && dataItem.ListAction == null" class="centertext">
+                        <input kendoCheckBox type="checkbox" [checked]="inputCheckedCheck(dataItem.ListDataPermission, column.RoleCode)"/>
+                    </div>
+                </ng-template>
+            </kendo-treelist-column>
+
+        </kendo-treelist>
+
+
+    </div>
+</div>

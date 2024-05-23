@@ -90,6 +90,30 @@ export const ModuleDataAdmin: Array<any> = [
                 disabled: false,
                 LstChild: []
             },
+            {
+                Name: "Quản trị hệ thống",
+                Code: "config001-system-management",
+                Link: "/config/config001-authorization",
+                Type: 'group',
+                Icon:'k-i-files',
+                ModuleID: "config001-authorization",
+                Actived: false,
+                disabled: false,
+                LstChild: [
+                    {
+                        Name: "Phân quyền",
+                        Code: "config001-authorization",
+                        Link: "/config/config001-authorization",
+                        Type: 'function',
+                        ModuleID: "config001-authorization",
+                        Parent: "Quản trị hệ thống",
+                        LstChild: [],
+                        Actived: false,
+                        disabled: false,
+                    }
+                ]
+                
+            },
 
         ]
     },
@@ -103,11 +127,11 @@ export const ModuleDataAdmin: Array<any> = [
         ListMenu: [
             {
                 Name: "Đợt đánh giá",
-                Code: "hri001-evaluation-list",
+                Code: "chri001-evaluation-list",
                 Link: "/hri/hri001-evaluation-list",
                 Type: 'group',
                 Icon:'k-i-files',
-                ModuleID: "hri001-evaluation-list",
+                ModuleID: "hri001-evaluation-list", 
                 Actived: false,
                 disabled: false,
                 LstChild: [

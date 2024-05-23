@@ -44,7 +44,7 @@ import { Hri001EvaluationListComponent } from './pages/hri001-evaluation-list/hr
     HamperDrawerComponent,
     StatusColorPipe,
     DialogComponent,
-    DialogDirective,
+    DialogDirective
   ],
   imports: [
     PHriRoutingModule,

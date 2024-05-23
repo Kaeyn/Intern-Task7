@@ -2,6 +2,7 @@
   .k-list-optionlabel.k-selected {
     background-color: #1a6634;
   }
+
   .k-checkbox:checked {
     accent-color: #1a6634;
     background-color: #1a6634;
@@ -12,15 +13,22 @@
     box-shadow: none;
   }
 
-  .k-i-search.k-input-icon.k-icon {
-    display: none;
-  }
-
   .k-list-optionlabel {
     color: black;
+
+    &:hover {
+      background-color: rgba($color: #1a6634, $alpha: 0.4);
+      color: #FFFFFF;
+    }
   }
+
   .k-list-optionlabel.k-selected:hover {
     background-color: #1a6634;
+  }
+
+  .k-list-item:hover {
+    background-color: rgba($color: #1a6634, $alpha: 0.4);
+    color: #FFFFFF;
   }
 
   .k-list-item.k-selected {
@@ -30,15 +38,123 @@
   .k-list-item.k-selected:hover {
     background-color: #1a6634;
   }
+
+  .k-input-solid:focus,
+  .k-input-solid.k-focus,
+  .k-input-solid:focus-within {
+    border-color: #1a6634;
+    box-shadow: none;
+  }
+
+  .k-dropdowntree-popup,
+  .k-multiselecttree-popup {
+    .k-input-prefix {
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+  }
+
+  .k-treeview {
+    padding: 0 !important;
+    .k-treeview-item{
+      &.actived{
+        color: white;
+        background-color: #1a6634;
+      }
+      cursor: pointer;
+    }
+
+    .k-treeview-mid, .k-treeview-top, .k-treeview-bot{   
+
+      .k-checkbox-wrapper{
+        display: none;
+      }
+      >.k-treeview-toggle{
+        height: 32px;
+        border: none;
+
+        // &.actived{
+        //   color: white;
+        //   background-color: #1a6634;
+        // }
+      }
+      &:hover{
+        >.k-treeview-toggle{
+          background-color: rgba($color: #1a6634, $alpha: 0.4);
+          color: #FFFFFF;
+          .icon{
+            color: #FFFFFF;
+          }
+  
+        }
+        >.k-treeview-leaf{
+          background-color: rgba($color: #1a6634, $alpha: 0.4);
+          color: #FFFFFF;
+          .icon{
+            color: #FFFFFF;
+          }
+        }
+      }
+
+    }
+    .k-treeview-leaf
+      {
+        width: 100%;
+        border-radius: 0px;
+        height: 32px;
+        border: none;
+      
+        .icon{
+          color: #5A6276;
+        }
+
+        &.k-selected {
+          color: black  ;
+          background-color: #FFFFFF;
+        }
+        &.k-focus{
+          box-shadow: none;
+        }
+      }
+  }
+
+
+
+  .k-icon.k-i-caret-alt-down::before {
+    content: "\e015" !important;
+  }
+
+  .k-icon.k-i-caret-alt-right::before {
+    content: "\e014" !important;
+  }
+  
+  .k-checkbox{
+    border-width: 1px;
+    border-color: #1a6634;
+    &:checked:focus{
+        box-shadow: none;
+        border-color: #1a6634;
+    }
+    &:checked{
+        border-color:#1a6634;
+    }
+    &:hover{
+        border-color: #1a6634;
+        background-color: #1a6634;
+    }
+}
+
 }
 
 ::ng-deep {
   .k-notification-group {
     margin-bottom: 32px;
+
     .button-notification {
       margin-left: 110px;
       border-radius: 10px;
       border: 0px;
+
       .k-notification-content {
         max-width: 247px;
         word-wrap: break-word;
@@ -47,11 +163,14 @@
         line-height: 22px;
       }
     }
+
     .k-notification-success {
       background-color: #1a6634;
     }
+
     .k-notification-error {
       background-color: #fd7676;
     }
   }
 }
+

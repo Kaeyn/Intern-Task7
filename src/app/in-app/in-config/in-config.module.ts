@@ -24,11 +24,12 @@ import { PricePipe } from './pages/shared/pipes/PricePipe.pipe';
 import { Config002PartnerManagementComponent } from './pages/config002-partner-management/config002-partner-management.component';
 import { HamperDrawerComponent } from './pages/shared/components/hamperdrawer/drawer.component';
 import { ButtonModule } from '@progress/kendo-angular-buttons';
-import { IconModule } from '@progress/kendo-angular-icons';
 import { StatusColorPipe } from './pages/shared/pipes/StatusColorPipe';
 import { DialogComponent } from './pages/shared/components/dialog/dialog.component';
 import { DialogDirective } from './pages/shared/directives/dialog.directive';
 import { Config005HamperDetailComponent } from './pages/config005-hamper-detail/config005-hamper-detail.component';
+import { Config001AuthorizationComponent } from './pages/config001-authorization/config001-authorization.component';
+import { IconsModule } from '@progress/kendo-angular-icons';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { Config005HamperDetailComponent } from './pages/config005-hamper-detail/
     DialogComponent,
     DialogDirective,
     Config005HamperDetailComponent,
+    Config001AuthorizationComponent
   ],
   imports: [
     PConfigRoutingModule,
@@ -60,7 +62,7 @@ import { Config005HamperDetailComponent } from './pages/config005-hamper-detail/
     InputsModule,
     LabelModule,
     ButtonModule,
-    IconModule
+    IconsModule
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA,

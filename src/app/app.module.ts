@@ -10,11 +10,11 @@ import { InputsModule, TextBoxModule } from '@progress/kendo-angular-inputs';
 import { LayoutModule } from '@progress/kendo-angular-layout';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule, LocationStrategy, HashLocationStrategy } from '@angular/common';
-import { IconsModule, SVGIconModule } from '@progress/kendo-angular-icons';
 import 'hammerjs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { NotificationService } from '@progress/kendo-angular-notification';
+import { IconsModule, SVGIconModule } from '@progress/kendo-angular-icons';
 
 @NgModule({
   declarations: [
